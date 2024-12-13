@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\JenisAlatController;
 use App\Http\Controllers\JenisInstansiController;
@@ -49,3 +50,8 @@ Route::resource('instansi', InstansiController::class);
 Route::resource('jenis_instansi', JenisInstansiController::class);
 Route::resource('jenis_alat', JenisAlatController::class);
 Route::resource('kategori_alat', KategoriAlatController::class);
+
+
+
+Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/auth/login', [AuthController::class, 'login']);
