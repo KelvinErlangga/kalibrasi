@@ -31,14 +31,15 @@
     </div>
 
     <ul class="nav nav-list">
-        <li class="active">
-            <a href="{{ route('home') }}">
+        <li class="{{ Route::is('sna.dashboard') ? 'active' : '' }}">
+            <a href="{{ route('sna.dashboard') }}">
                 <i class="menu-icon fa fa-tachometer"></i>
                 <span class="menu-text"> Dashboard </span>
             </a>
         </li>
 
-        <li>
+        <li
+            class="dropdown {{ Route::is('instansi.index', 'jenis_alat.index', 'jenis_instansi.index', 'kategori_alat.index') ? 'active open' : '' }}">
             <a href="#" class="dropdown-toggle">
                 <i class="menu-icon fa fa-desktop"></i>
                 <span class="menu-text"> Master </span>
@@ -46,12 +47,39 @@
             </a>
 
             <ul class="submenu">
-                <li><a href="#"><i class="menu-icon fa fa-caret-right"></i> Instansi</a></li>
-                <li><a href="#"><i class="menu-icon fa fa-caret-right"></i> Jenis Alat</a></li>
-                <li><a href="#"><i class="menu-icon fa fa-caret-right"></i> Jenis Instansi</a></li>
-                <li><a href="#"><i class="menu-icon fa fa-caret-right"></i> Kategori Alat</a></li>
+                <li class="{{ Route::is('instansi.index') ? 'active' : '' }}">
+                    <a href="{{ route('instansi.index') }}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Instansi
+                    </a>
+                </li>
+                <li class="{{ Route::is('jenis_alat.index') ? 'active' : '' }}">
+                    <a href="{{ route('jenis_alat.index') }}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Jenis Alat
+                    </a>
+                </li>
+                <li class="{{ Route::is('jenis_instansi.index') ? 'active' : '' }}">
+                    <a href="{{ route('jenis_instansi.index') }}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Jenis Instansi
+                    </a>
+                </li>
+                <li class="{{ Route::is('kategori_alat.index') ? 'active' : '' }}">
+                    <a href="{{ route('kategori_alat.index') }}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Kategori Alat
+                    </a>
+                </li>
+                <li class="{{ Route::is('tambah_user.index') ? 'active' : '' }}">
+                    <a href="{{ route('tambah_user.index') }}">
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Tambah User
+                    </a>
+                </li>
             </ul>
         </li>
+
 
         <li>
             <a href="#" class="dropdown-toggle">
@@ -69,7 +97,6 @@
 
     <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
         <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
-           data-icon1="ace-icon fa fa-angle-double-left"
-           data-icon2="ace-icon fa fa-angle-double-right"></i>
+            data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
     </div>
 </div>

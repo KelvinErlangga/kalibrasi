@@ -3,9 +3,11 @@
 @section('title', 'Kategori Alat | SNA MEDIKA')
 
 @section('content')
+@include('layouts.breadcrumbs', ['title' => 'Data Instansi'])
+
 <div class="row">
-    <div class="col-xs-12">
-        <!-- Tombol Tambah Kategori Alat -->
+    <div class="col-xs-12 py-5" style="padding: 15px;">
+        
         <button class="btn btn-white btn-info btn-bold m-10" data-toggle="modal" data-target="#addKategoriAlatModal">
             <i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>
             Tambah Kategori Alat
@@ -26,7 +28,8 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="kategori_alat_nama">Nama Kategori Alat</label>
-                                <input type="text" class="form-control" id="kategori_alat_nama" name="kategori_alat_nama" required>
+                                <input type="text" class="form-control" id="kategori_alat_nama"
+                                    name="kategori_alat_nama" required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -53,19 +56,22 @@
                 </thead>
 
                 <tbody>
-                    @foreach($kategoriAlats as $item)
-                    <tr>
-                        <td>{{ $item->kategori_alat_nama }}</td>
-                        <td>
-                            <a href="{{ route('kategori_alat.show', $item->kategori_alat_id) }}" class="btn btn-info btn-sm">Detail</a>
-                            <a href="{{ route('kategori_alat.edit', $item->kategori_alat_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('kategori_alat.destroy', $item->kategori_alat_id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
+                    @foreach($users as $item)
+                        <tr>
+                            <td>{{ $item->kategori_alat_nama }}</td>
+                            <td>
+                                <a href="{{ route('kategori_alat.show', $item->kategori_alat_id) }}"
+                                    class="btn btn-info btn-sm">Detail</a>
+                                <a href="{{ route('kategori_alat.edit', $item->kategori_alat_id) }}"
+                                    class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('kategori_alat.destroy', $item->kategori_alat_id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

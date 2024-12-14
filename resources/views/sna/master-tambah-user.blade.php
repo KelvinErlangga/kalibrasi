@@ -1,92 +1,93 @@
 @extends('layouts.master')
+@include('layouts.htmlheader')
 
 @section('title', 'Jenis Alat | SNA MEDIKA')
 
 @section('content')
-<div class="breadcrumbs" id="breadcrumbs">
-    <ul class="breadcrumb">
-        <li>
-            <i class="ace-icon fa fa-home home-icon"></i>
-            <a href="#">Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-    </ul>
+@include('layouts.breadcrumbs', ['title' => 'Data user'])
 
-    <div class="nav-search" id="nav-search">
-        <i class="ace-icon fa fa-user user-icon mr-5"></i>
-        <b class="pl-2">{{session('user_name')}}</b>
-    </div><!-- /.nav-search -->
-
-</div>
-
-<div class="row" style="padding: 10;">
-    <div class="col-xs-12">
+<div class="row">
+    <div class="col-xs-12 py-5" style="padding: 15px;">
         <!-- Tombol Tambah Jenis Alat -->
-        <button class="btn btn-white btn-info btn-bold m-10" data-toggle="modal" data-target="#addJenisAlatModal">
-            <i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>
-            Tambah Jenis Alat
-        </button>
+        <a href="{{ route('user.create') }}" class="btn btn-primary  btn-bold m-10 ">
+            <i class="fa fa-plus bigger-110 white"></i>
+            Tambah Pengguna
+        </a>
 
-        <!-- Modal Tambah Jenis Alat -->
-        <div id="addJenisAlatModal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Jenis Alat</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{ route('jenis_alat.store') }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="jenis">Jenis Alat</label>
-                                <input type="text" class="form-control" id="jenis" name="jenis_alat_nama" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
-                    </form>
-                </div>
+        <div class="table-header" style="padding:10px; display:flex; margin-top: 10px; justify-content: space-between;">
+            Data User pengguna
+            <div class="bg-primary" style="margin-left: 15px; width: 25%;">
+                <b><select id="pilDivisi" class="form-control pilih-divisi bg-success"
+                        data-placeholder="Pilih Divisi...">
+                        <option value="https://demo.progsby.co.id/sna/master-user/pilih/0" selected="selected" disabled>
+                            --
+                            Pilih Divisi
+                        </option>
+                        <option value=""><b>PENGGUNA</b></option>
+                        <option value=""><b>ADMIN</b></option>
+                        <option value=""><b>SUPERADMIN</b></option>
+                    </select>
+                </b>
             </div>
-        </div>
-
-        <div class="table-header">
-            Data Jenis Alat
         </div>
         <!-- Tabel Data Jenis Alat -->
         <div>
             <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Jenis Alat</th>
-                        <th>Aksi</th>
+
+                        <th>Username</th>
+                        <th>Nama</th>
+                        <th>Password</th>
+                        <th>Akses</th>
+                        <th style="text-align: center;">Edit</th>
+                        <th style="text-align: center;">Hapus</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    @foreach($jenisAlat as $item)
+                    @foreach($user as $item)
                         <tr>
-                            <td>{{ $item->jenis_alat_nama }}</td>
-                            <td>
-                                <a href="{{ route('jenis_alat.show', $item->jenis_alat_id) }}"
-                                    class="btn btn-info btn-sm">Detail</a>
-                                <a href="{{ route('jenis_alat.edit', $item->jenis_alat_id) }}"
-                                    class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('jenis_alat.destroy', $item->jenis_alat_id) }}" method="POST"
+                            <td>{{ $item->user_username }}</td>
+                            <td>{{ $item->user_nama }}</td>
+                            <td>{{ $item->user_password }}</td>
+                            <td>{{ $item->user_akses}}</td>
+
+                            <td style="text-align: center;">
+                                <a href="{{ route('user.edit', $item->user_id) }}" class="fa fa-pencil-square-o bigger-110 blue"></a>
+                            </td>
+                            <td style="text-align: center;">
+                                <form action="{{ route('user.hapus', $item->user_id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                    <button type="submit" class="fa fa-trash bigger-110 red bg-none"
+                                        style="border: none; background: none;"></button>
                                 </form>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <!-- Tombol Previous -->
+                    <li class="page-item {{ $user->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $user->previousPageUrl() }}">Previous</a>
+                    </li>
+
+                    <!-- Tombol Halaman -->
+                    @foreach ($user->getUrlRange(1, $user->lastPage()) as $page => $url)
+                        <li class="page-item {{ $user->currentPage() == $page ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endforeach
+
+                    <!-- Tombol Next -->
+                    <li class="page-item {{ $user->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $user->nextPageUrl() }}">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

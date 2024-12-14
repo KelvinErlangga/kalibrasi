@@ -3,8 +3,11 @@
 @section('title', 'Jenis Alat | SNA MEDIKA')
 
 @section('content')
+@include('layouts.breadcrumbs', ['title' => 'Data Instansi'])
+
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-12 py-5" style="padding: 15px;">
+
         <!-- Tombol Tambah Jenis Alat -->
         <button class="btn btn-white btn-info btn-bold m-10" data-toggle="modal" data-target="#addJenisAlatModal">
             <i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>
@@ -53,18 +56,21 @@
 
                 <tbody>
                     @foreach($jenisAlat as $item)
-                    <tr>
-                        <td>{{ $item->jenis_alat_nama }}</td>
-                        <td>
-                            <a href="{{ route('jenis_alat.show', $item->jenis_alat_id) }}" class="btn btn-info btn-sm">Detail</a>
-                            <a href="{{ route('jenis_alat.edit', $item->jenis_alat_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('jenis_alat.destroy', $item->jenis_alat_id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ $item->jenis_alat_nama }}</td>
+                            <td>
+                                <a href="{{ route('jenis_alat.show', $item->jenis_alat_id) }}"
+                                    class="btn btn-info btn-sm">Detail</a>
+                                <a href="{{ route('jenis_alat.edit', $item->jenis_alat_id) }}"
+                                    class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('jenis_alat.destroy', $item->jenis_alat_id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

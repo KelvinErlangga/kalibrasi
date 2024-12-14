@@ -10,20 +10,19 @@ class Userkalibrasi extends Model implements Authenticatable
 {
     use AuthenticatableTrait;
 
-    // Kolom-kolom yang ada di tabel 'userkalibrasi'
-    protected $table = 'user'; // Sesuaikan dengan nama tabel Anda
+    protected $table = 'user';
+    protected $primaryKey = 'user_id';
 
-    protected $fillable = ['user_username', 'user_password', 'user_nama']; // Sesuaikan dengan kolom yang Anda gunakan
+    protected $fillable = ['user_username', 'user_password', 'user_nama', 'user_akses']; // Sesuaikan dengan kolom yang Anda gunakan
 
-    // Atur nama kolom ID dan password sesuai dengan tabel Anda
     public function getAuthIdentifierName()
     {
-        return 'id';  // Nama kolom yang digunakan sebagai identifier
+        return 'user_username';  // Nama kolom yang digunakan sebagai identifier
     }
 
     public function getAuthIdentifier()
     {
-        return $this->getKey();  // Biasanya mengembalikan ID pengguna
+        return $this->user_username;  // Mengembalikan username sebagai identifier
     }
 
     public function getAuthPassword()

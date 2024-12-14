@@ -37,7 +37,7 @@ class AuthController extends Controller
             $remember = $request->has('remember');
 
             // Redirect ke halaman home setelah login
-            return redirect()->intended('/');
+            return redirect()->intended('/dashboard');
         } else {
             // Jika login gagal, kembali dengan pesan error
             return back()->withErrors(['nama' => 'Nama atau password salah.']);
