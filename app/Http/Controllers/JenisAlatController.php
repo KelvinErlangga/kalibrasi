@@ -9,63 +9,54 @@ class JenisAlatController extends Controller
 {
     public function index()
     {
-        // Retrieve all JenisAlat records
-        $jenisAlat = JenisAlat::all();
-        return view('sna.master-jenis-alat', compact('jenisAlat'));
+        $jenisalat = JenisAlat::paginate(10);
+        return view('sna.master-jenis-alat', compact('jenisalat'));
     }
-
     public function create()
     {
-        // Show form for creating new JenisAlat
-        return view('jenis_alat.create');
+        return view('form.create.add_jenis_alat');
     }
-
     public function store(Request $request)
     {
-        // Validate the request
-        $request->validate([
+        $validatedData = $request->validate([
             'jenis_alat_nama' => 'required|string|max:50',
         ]);
-
-        // Create new JenisAlat record
-        JenisAlat::create($request->only('jenis_alat_nama'));
-
+        JenisAlat::create($validatedData);
         return redirect()->route('jenis_alat.index')->with('success', 'Jenis Alat berhasil ditambahkan!');
     }
 
-    public function show($id)
+    public function show($jenis_alat_id)
     {
-        // Find the JenisAlat by id
-        $jenisAlat = JenisAlat::findOrFail($id);
-        return view('jenis_alat.show', compact('jenisAlat'));
+        $jenisalat = JenisAlat::findOrFail($jenis_alat_id);
+        return view('jenis_alat.show', compact('jenisalat'));
     }
 
-    public function edit($id)
+    public function edit($jenis_alat_id)
     {
         // Find the JenisAlat by id for editing
-        $jenisAlat = JenisAlat::findOrFail($id);
-        return view('jenis_alat.edit', compact('jenisAlat'));
+        $jenisalat = JenisAlat::findOrFail($jenis_alat_id);
+        return view('form.edit.edit_jenis_alat', compact('jenisalat'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $jenis_alat_id)
     {
+        $jenisalat = JenisAlat::findOrFail($jenis_alat_id);
         // Validate the request
-        $request->validate([
+        $validatedData = $request->validate([
             'jenis_alat_nama' => 'required|string|max:255',
         ]);
 
         // Find the JenisAlat by id and update it
-        $jenisAlat = JenisAlat::findOrFail($id);
-        $jenisAlat->update($request->only('jenis_alat_nama'));
+        $jenisalat->update($validatedData);
 
         return redirect()->route('jenis_alat.index')->with('success', 'Jenis Alat berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    public function destroy($jenis_alat_id)
     {
         // Find the JenisAlat by id and delete it
-        $jenisAlat = JenisAlat::findOrFail($id);
-        $jenisAlat->delete();
+        $jenisalat = JenisAlat::findOrFail($jenis_alat_id);
+        $jenisalat->delete();
 
         return redirect()->route('jenis_alat.index')->with('success', 'Jenis Alat berhasil dihapus!');
     }

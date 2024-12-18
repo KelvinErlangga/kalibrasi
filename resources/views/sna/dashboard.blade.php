@@ -10,8 +10,6 @@
 
     @include('layouts.breadcrumbs', ['title' => 'Dashboard'])
 
-
-
     <div class="text-center">
         <div class="card shadow-lg ">
             <div class="card-body">

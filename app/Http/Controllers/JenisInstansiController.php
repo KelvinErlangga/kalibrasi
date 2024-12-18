@@ -10,66 +10,55 @@ class JenisInstansiController extends Controller
     public function index()
     {
         // Retrieve all JenisInstansi records
-        $jenisInstansi = JenisInstansi::all();
-        return view('sna.master-jenis-instansi', compact('jenisInstansi'));
+        $jenisinstansi = JenisInstansi::paginate(10);
+        return view('sna.master-jenis-instansi', compact('jenisinstansi'));
     }
 
     public function create()
     {
         // Show the form for creating a new JenisInstansi
-        return view('jenis_instansi.create');
+        return view('form.create.add_jenis_instansi');
     }
 
     public function store(Request $request)
     {
-        // Validate the request
-        $request->validate([
+        $validatedData = $request->validate([
             'jenis_instansi_nama' => 'required|string|max:100',
         ]);
 
-        // Create a new JenisInstansi record
-        JenisInstansi::create([
-            'jenis_instansi_nama' => $request->jenis_instansi_nama,
-        ]);
-
+        JenisInstansi::create($validatedData);
         return redirect()->route('jenis_instansi.index')->with('success', 'Jenis Instansi berhasil ditambahkan!');
     }
 
-    public function show($id)
+    public function show($jenis_instansi_id)
     {
-        // Find the JenisInstansi by ID
-        $jenisInstansi = JenisInstansi::findOrFail($id);
-        return view('jenis_instansi.show', compact('jenisInstansi'));
+        $jenisinstansi = JenisInstansi::findOrFail($jenis_instansi_id);
+        return view('jenisinstansi.show', compact('jenisinstansi'));
     }
 
-    public function edit($id)
+    public function edit($jenis_instansi_id)
     {
-        // Find the JenisInstansi by ID for editing
-        $jenisInstansi = JenisInstansi::findOrFail($id);
-        return view('jenis_instansi.edit', compact('jenisInstansi'));
+        $jenisinstansi = JenisInstansi::findOrFail($jenis_instansi_id);
+        return view('form.edit.edit_jenis_instansi', compact('jenisinstansi'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $jenis_instansi_id)
     {
-        // Validate the request
-        $request->validate([
+        $jenisinstansi = JenisInstansi::findOrFail($jenis_instansi_id);
+
+        $validatedData = $request->validate([
             'jenis_instansi_nama' => 'required|string|max:100',
         ]);
 
-        // Find the JenisInstansi by ID and update it
-        $jenisInstansi = JenisInstansi::findOrFail($id);
-        $jenisInstansi->update([
-            'jenis_instansi_nama' => $request->jenis_instansi_nama,
-        ]);
-
+        $jenisinstansi->update($validatedData);
         return redirect()->route('jenis_instansi.index')->with('success', 'Jenis Instansi berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    public function destroy($jenis_instansi_id)
     {
         // Find the JenisInstansi by ID and delete it
-        $jenisInstansi = JenisInstansi::findOrFail($id);
-        $jenisInstansi->delete();
+        $jenisinstansi = JenisInstansi::findOrFail($jenis_instansi_id);
+        $jenisinstansi->delete();
 
         return redirect()->route('jenis_instansi.index')->with('success', 'Jenis Instansi berhasil dihapus!');
     }

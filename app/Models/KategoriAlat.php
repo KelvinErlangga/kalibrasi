@@ -13,4 +13,9 @@ class KategoriAlat extends Model
         'kategori_alat_id',
         'kategori_alat_nama',
     ];
+    protected $primaryKey = 'kategori_alat_id'; // Ganti dengan nama kolom primary key Anda
+    public $timestamps = false;
+
+
+
 }

@@ -9,24 +9,32 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 class Userkalibrasi extends Model implements Authenticatable
 {
     use AuthenticatableTrait;
+    protected $users;
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
+    public $timestamps = false; // Nonaktifkan jika tabel tidak menggunakan timestamps
+    protected $keyType = 'int'; // Ganti dengan 'string' jika primary key bukan integer
 
-    protected $fillable = ['user_username', 'user_password', 'user_nama', 'user_akses']; // Sesuaikan dengan kolom yang Anda gunakan
+    protected $fillable = [
+        'user_username',
+        'user_password',
+        'user_nama',
+        'user_akses',
+    ];
 
     public function getAuthIdentifierName()
     {
-        return 'user_username';  // Nama kolom yang digunakan sebagai identifier
+        return 'user_username';
     }
 
     public function getAuthIdentifier()
     {
-        return $this->user_username;  // Mengembalikan username sebagai identifier
+        return $this->user_username;
     }
 
     public function getAuthPassword()
     {
-        return $this->user_password; // Kolom yang menyimpan password pengguna
+        return $this->user_password;
     }
 }

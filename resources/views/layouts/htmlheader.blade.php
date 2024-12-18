@@ -14,6 +14,8 @@
 
     <!-- ace styles -->
     <link rel="stylesheet" href="{{ asset('/css/ace.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!--[if lte IE 9]>
     <link rel="stylesheet" href="{{ asset('/css/ace-part2.css') }}" class="ace-main-stylesheet" />

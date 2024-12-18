@@ -5,45 +5,47 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Userkalibrasi;
-use Illuminate\Support\Facades\Hash;
-
 class TambahUserController extends Controller
 {
     // Menampilkan daftar pengguna
     public function index()
     {
-        $user = Userkalibrasi::paginate(7);
+        $user = Userkalibrasi::paginate(10);
         return view('sna.master-tambah-user', compact('user'));
     }
 
     // Form tambah pengguna
     public function create()
     {
-        $userTypes = ['admin', 'petugas']; // Tipe user yang bisa dipilih
-        return view('form.add_user', compact('userTypes'));
+        $userTypes = ['admin', 'superadmin', 'petugas']; // Tipe user yang bisa dipilih
+        return view('form.create.add_user', compact('userTypes'));
     }
-
     public function store(Request $request)
     {
-        $request->validate([
-            'user_username' => 'required|string|max:255|unique:userkalibrasi',
-            'user_password' => 'required|string|min:6',
-            'user_nama' => 'required|string|max:255',
-            'user_type' => 'required|string', // Validasi untuk jenis user
-        ]);
+        $validatedData = $request->validate(
+            [
+                'user_username' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    'unique:user',
+                    'regex:/^\S+$/',
+                ],
+                'user_password' => 'required|string|min:6',
+                'user_nama' => 'required|string|max:255',
+                'user_akses' => 'required|string',
+            ],
+            [
+                'user_username.regex' => 'Username tidak boleh mengandung spasi.',
+                'user_password.min' => 'Password harus minimal 6 karakter.', // Pesan kesalahan
+            ]
+        );
 
-        Userkalibrasi::create([
-            'user_username' => $request->input('user_username'),
-            'user_password' => Hash::make($request->input('user_password')),
-            'user_nama' => $request->input('user_nama'),
-            'user_type' => $request->input('user_type'), // Menyimpan jenis user
-        ]);
-
+        Userkalibrasi::create($validatedData);
         return redirect()->route('user.index')->with('success', 'Pengguna berhasil ditambahkan!');
     }
 
 
-    // Menampilkan detail pengguna
     public function show($user_id)
     {
         $user = Userkalibrasi::findOrFail($user_id); // Menggunakan user_id untuk mencari
@@ -54,35 +56,35 @@ class TambahUserController extends Controller
     public function edit($user_id)
     {
         $user = Userkalibrasi::findOrFail($user_id);
-        return view('user.edit', compact('user'));
+        $userTypes = ['admin', 'superadmin', 'petugas']; // Definisikan tipe user yang bisa dipilih
+
+        // Pastikan untuk mengirimkan kedua variabel ke view
+        return view('form.edit.edit_user', compact('user', 'userTypes'));
     }
 
-    // Update data pengguna
     public function update(Request $request, $user_id)
     {
-        $request->validate([
-            'user_username' => 'required|string|max:255|unique:userkalibrasi,user_username,' . $user_id,
-            'user_password' => 'nullable|string|min:6',
-            'user_nama' => 'required|string|max:255',
-        ]);
-
         $user = Userkalibrasi::findOrFail($user_id);
 
-        $data = [
-            'user_username' => $request->input('user_username'),
-            'user_nama' => $request->input('user_nama'),
-        ];
+        $validatedData = $request->validate([
+            'user_username' => 'required|string|max:255|unique:user,user_username,' . $user_id . ',user_id',
+            'user_nama' => 'required|string|max:255',
+            'user_akses' => 'required|string|in:admin,superadmin,petugas',
+        ]);
 
+        // Cek apakah password diisi, jika tidak gunakan password lama
         if ($request->filled('user_password')) {
-            $data['user_password'] = Hash::make($request->input('user_password')); // Enkripsi password
+            $validatedData['user_password'] = $request->user_password; // Simpan password tanpa hashing
+        } else {
+            $validatedData['user_password'] = $user->user_password; // Tetap gunakan password lama
         }
 
-        $user->update($data);
+        // Update pengguna dengan data yang telah divalidasi
+        $user->update($validatedData);
 
         return redirect()->route('user.index')->with('success', 'Pengguna berhasil diperbarui!');
     }
 
-    // Hapus pengguna
     public function hapus($user_id)
     {
         $user = Userkalibrasi::findOrFail($user_id);

@@ -16,26 +16,13 @@
 
         <div class="table-header" style="padding:10px; display:flex; margin-top: 10px; justify-content: space-between;">
             Data User pengguna
-            <div class="bg-primary" style="margin-left: 15px; width: 25%;">
-                <b><select id="pilDivisi" class="form-control pilih-divisi bg-success"
-                        data-placeholder="Pilih Divisi...">
-                        <option value="https://demo.progsby.co.id/sna/master-user/pilih/0" selected="selected" disabled>
-                            --
-                            Pilih Divisi
-                        </option>
-                        <option value=""><b>PENGGUNA</b></option>
-                        <option value=""><b>ADMIN</b></option>
-                        <option value=""><b>SUPERADMIN</b></option>
-                    </select>
-                </b>
-            </div>
+
         </div>
         <!-- Tabel Data Jenis Alat -->
         <div>
-            <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+            <table style="margin-top:15px;" id="dynamic-table" class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-
                         <th>Username</th>
                         <th>Nama</th>
                         <th>Password</th>
@@ -45,29 +32,59 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($user as $item)
+                    @forelse($user as $item)
                         <tr>
                             <td>{{ $item->user_username }}</td>
                             <td>{{ $item->user_nama }}</td>
                             <td>{{ $item->user_password }}</td>
-                            <td>{{ $item->user_akses}}</td>
+                            <td>{{ $item->user_akses }}</td>
 
                             <td style="text-align: center;">
-                                <a href="{{ route('user.edit', $item->user_id) }}" class="fa fa-pencil-square-o bigger-110 blue"></a>
+                                <a href="{{ route('user.edit', $item->user_id) }}"
+                                    class="fa fa-pencil-square-o bigger-110 blue"></a>
                             </td>
                             <td style="text-align: center;">
-                                <form action="{{ route('user.hapus', $item->user_id) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="fa fa-trash bigger-110 red bg-none"
-                                        style="border: none; background: none;"></button>
-                                </form>
+                                <button type="button" class="fa fa-trash bigger-110 red bg-none" data-toggle="modal"
+                                    data-target="#exampleModal" data-id="{{ $item->user_id }}"
+                                    data-nama="{{ $item->user_nama }}" style="border: none; background: none;">
+                                </button>
                             </td>
+
                         </tr>
-                    @endforeach
+                        <!-- Modal -->
+                        <form action="{{ route('user.hapus', $item->user_id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content" style="width: 50%; margin: 0 auto;">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="exampleModalLabel"><b>Hapus Data Pengguna</b></h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Content goes here, e.g., showing user name for deletion -->
+                                            <div style="text-align: center;">
+                                                <h5>Apakah Anda yakin ingin menghapus data pengguna ini?</h5>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger">Hapus Data</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    @empty
+                        <tr>
+                            <td colspan="6" style="text-align: center;">Data tidak ditemukan</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
+
             <nav aria-label="...">
                 <ul class="pagination">
                     <!-- Tombol Previous -->

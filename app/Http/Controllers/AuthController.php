@@ -33,9 +33,6 @@ class AuthController extends Controller
             // Simpan nama pengguna di sesi untuk digunakan di halaman lain
             session(['user_name' => $user->user_nama]);
 
-            // Jika 'remember me' dicentang
-            $remember = $request->has('remember');
-
             // Redirect ke halaman home setelah login
             return redirect()->intended('/dashboard');
         } else {

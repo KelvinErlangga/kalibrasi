@@ -17,9 +17,9 @@
                 <i class="ace-icon fa fa-users"></i>
             </button>
 
-            <button class="btn btn-danger">
-                <i class="ace-icon fa fa-cogs"></i>
-            </button>
+            <a class="btn btn-danger" href="{{ route('login') }}">
+                <i class="ace-icon fa fa-sign-out"></i>
+            </a>
         </div>
 
         <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
